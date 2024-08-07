@@ -16,12 +16,12 @@ int find_column(vector<vector<int>> &blocks, vector<vector<int>> &cols,
 {
     for (int c = 0; c < M - M % block_size; c++)
     {
-        if (!blocks[cur_x][c / block_size])
+        if (!blocks[cur_x][c / block_size] || c / block_size == cur_y)
         {
             c += block_size - 1;
             continue;
         }
-        if (c / block_size == cur_y || cols[c][cur_x] != 0)
+        if (cols[c][cur_x] != 0)
             continue;
         bool ck = 1;
         for (int b = 0; b < N / block_size; b++)
@@ -95,12 +95,12 @@ int find_row(vector<vector<int>> &blocks, vector<vector<int>> &rows,
 {
     for (int r = 0; r < N - N % block_size; r++)
     {
-        if (!blocks[r / block_size][cur_y])
+        if (!blocks[r / block_size][cur_y] || r / block_size == cur_x)
         {
             r += block_size - 1;
             continue;
         }
-        if (r / block_size == cur_x || rows[r][cur_y] != 0)
+        if (rows[r][cur_y] != 0)
             continue;
         bool ck = 1;
         for (int b = 0; b < M / block_size; b++)
