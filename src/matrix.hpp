@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm>
 #include <set>
+#include <climits>
 
 using namespace std;
 
@@ -60,14 +61,14 @@ public:
         }
 
         int cnt, a, b;
-        double c;
         std::istringstream iss(line);
         iss >> n >> m >> cnt;
         resize();
 
         while (cnt--)
         {
-            f >> a >> b >> c;
+            f >> a >> b;
+            f.ignore(UINT_MAX, '\n');
             row[a - 1].push_back(b - 1);
             col[b - 1].push_back(a - 1);
         }
