@@ -16,7 +16,7 @@ class Matrix
 {
 public:
     int64_t n, m;
-    Matrix(){};
+    Matrix() {};
     Matrix(int n, int m)
     {
         assert(n > 0 && m > 0);
@@ -173,6 +173,30 @@ public:
         out << endl;
         out.close();
     }
+    void save_blocks_density(string path, int block_size)
+    {
+        ofstream out(path);
+        vector<int> cnt((m + block_size - 1) / block_size);
+        for (int i = 0; i < n; i++)
+        {
+            if (i % block_size == 0)
+            {
+                if (i != 0)
+                {
+                    for (int j = 0; j < m / block_size; j++)
+                    {
+                        if (cnt[j])
+                            out << i / block_size << ";" << j << ";" << cnt[j] << ";\n";
+                    }
+                }
+                fill(cnt.begin(), cnt.end(), 0);
+            }
+            for (int &j : row[row_index[i]])
+            {
+                cnt[col_index_inverse[j] / block_size]++;
+            }
+        }
+    }
     void generate(double density)
     {
         int64_t cnt = (n * m) * density;
@@ -214,7 +238,7 @@ private:
     }
 
     vector<vector<int>> row, col;
-    
+
     vector<int> row_index, col_index;
     vector<int> row_index_inverse, col_index_inverse;
 };
