@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <set>
 #include <climits>
+#include <random>
 
 using namespace std;
 
@@ -49,7 +50,7 @@ public:
         col_index_inverse[col_index[j]] = i;
         swap(col_index[i], col_index[j]);
     }
-    bool read_from_file(string path)
+    bool read_from_file(string path, bool shuffle_flag = 0)
     {
         ifstream f(path);
         if(f.fail()) return 1;
@@ -65,10 +66,23 @@ public:
         iss >> n >> m >> cnt;
         resize();
 
+        // generate a random permutation to rows and columns
+        std::mt19937 g(42);
+        vector<int> perm_r(n), perm_c(m);
+        iota(perm_r.begin(), perm_r.end(), 0);
+        iota(perm_c.begin(), perm_c.end(), 0);
+        shuffle(perm_r.begin(), perm_r.end(), g);
+        shuffle(perm_c.begin(), perm_c.end(), g);
+
         while (cnt--)
         {
             f >> a >> b;
             f.ignore(UINT_MAX, '\n');
+            if(shuffle_flag)     // apply the random permutation only if the flag is set
+            {
+                a = perm_r[a - 1] + 1;
+                b = perm_c[b - 1] + 1;
+            }
             row[a - 1].push_back(b - 1);
             col[b - 1].push_back(a - 1);
         }
